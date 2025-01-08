@@ -1,20 +1,20 @@
-// Load the schedule data
-const schedule = [
-    {
-        date: "2025-01-05",
-        slots: ["A", "B", "C", "A", "B", "C+A"]
-    },
-    {
-        date: "2025-01-06",
-        slots: ["B", "C", "A", "B", "C", "A+B"]
-    },
-    // Add more rows as needed
-];
+// Global variables
+let schedule = [];
+let currentWeek = 0;
 
-// Populate the table with data
+// Fetch schedule data from schedule.json
+fetch('schedule.json')
+    .then(response => response.json())
+    .then(data => {
+        schedule = data;
+        displayWeekSchedule(); // Display the first week's schedule on load
+    })
+    .catch(error => console.error("Error loading schedule:", error));
+
+// Populate table with schedule data
 function populateTable(data) {
     const tableBody = document.querySelector("#scheduleTable tbody");
-    tableBody.innerHTML = ""; // Clear previous data
+    tableBody.innerHTML = ""; // Clear existing table rows
 
     data.forEach(row => {
         const tr = document.createElement("tr");
@@ -22,7 +22,8 @@ function populateTable(data) {
         dateTd.textContent = row.date;
         tr.appendChild(dateTd);
 
-        row.slots.forEach(slot => {
+        // Populate time slot columns
+        Object.values(row.time_slots).forEach(slot => {
             const td = document.createElement("td");
             td.textContent = slot;
             tr.appendChild(td);
@@ -32,16 +33,48 @@ function populateTable(data) {
     });
 }
 
-// Filter the schedule by date
+// Filter the schedule by a specific date
 function filterSchedule() {
-    const dateInput = document.getElementById("date").value;
-    if (dateInput) {
-        const filteredData = schedule.filter(row => row.date === dateInput);
-        populateTable(filteredData);
+    const dateInput = document.getElementById("date").value; // Get the selected date
+    const filteredData = schedule.filter(row => row.date === dateInput);
+
+    const tableBody = document.querySelector("#scheduleTable tbody");
+    tableBody.innerHTML = ""; // Clear the table before populating new data
+
+    if (filteredData.length === 0) {
+        // Display a message if no data is found for the selected date
+        const noDataMessage = document.createElement("tr");
+        const td = document.createElement("td");
+        td.colSpan = 7; // Spanning all columns
+        td.textContent = "No schedule available for the selected date.";
+        td.style.textAlign = "center";
+        noDataMessage.appendChild(td);
+        tableBody.appendChild(noDataMessage);
     } else {
-        populateTable(schedule);
+        populateTable(filteredData);
     }
 }
 
-// Initialize the table with all data
-document.addEventListener("DOMContentLoaded", () => populateTable(schedule));
+// Display schedule for the current week
+function displayWeekSchedule() {
+    const startIndex = currentWeek * 7; // Calculate start index for the current week
+    const endIndex = startIndex + 7; // Calculate end index for the week
+    populateTable(schedule.slice(startIndex, endIndex));
+}
+
+// Show the previous week's schedule
+function showPreviousWeek() {
+    currentWeek = Math.max(0, currentWeek - 1); // Prevent going below the first week
+    displayWeekSchedule();
+}
+
+// Show the next week's schedule
+function showNextWeek() {
+    currentWeek++;
+    displayWeekSchedule();
+}
+
+// Toggle dark mode for the app
+function toggleDarkMode() {
+    document.body.classList.toggle("dark-mode");
+}
