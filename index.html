@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electricity Schedule</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <h1>Electricity Schedule</h1>
+        <p>Stay updated with the latest schedule!</p>
+    </header>
+
+    <main>
+        <section id="schedule">
+            <h2>Schedule</h2>
+            <div id="filter">
+                <label for="date">Filter by Date:</label>
+                <input type="date" id="date">
+                <button onclick="filterSchedule()">Apply</button>
+            </div>
+            <table id="scheduleTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>05:00-09:00</th>
+                        <th>09:00-13:00</th>
+                        <th>13:00-17:00</th>
+                        <th>17:00-21:00</th>
+                        <th>21:00-01:00</th>
+                        <th>01:00-05:00</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be populated here -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Electricity Schedule App</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
