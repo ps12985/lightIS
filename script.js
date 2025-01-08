@@ -35,8 +35,10 @@ function populateTable(data) {
 
 // Filter the schedule by a specific date
 function filterSchedule() {
-    const dateInput = document.getElementById("date").value; // Get the selected date
-    const filteredData = schedule.filter(row => row.date === dateInput);
+    const dateInput = document.getElementById("date").value; // Get the selected date in YYYY-MM-DD format
+    const formattedDate = dateInput.split("-").reverse().join("-"); // Convert to DD-MM-YYYY format
+
+    const filteredData = schedule.filter(row => row.date === formattedDate);
 
     const tableBody = document.querySelector("#scheduleTable tbody");
     tableBody.innerHTML = ""; // Clear the table before populating new data
